@@ -1,18 +1,23 @@
-
 import React, { useState } from 'react';
 import styles from '../styles/InputBox.module.scss';
 
-const InputBox = ({ handleInput }) => {
+type InputBoxProps = {
+  handleInput: (message: string) => void; 
+};
+
+const InputBox: React.FC<InputBoxProps> = ({ handleInput }) => {
   const [inputValue, setInputValue] = useState('');
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    handleInput(inputValue);
-    setInputValue('');
+    if (inputValue.trim()) {
+      handleInput(inputValue);  // Send input to parent handler
+      setInputValue('');        // Clear the input after submission
+    }
   };
 
   return (

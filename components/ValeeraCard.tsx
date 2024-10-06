@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Image from 'next/image';
 import InputBox from './InputBox';
@@ -6,25 +5,40 @@ import OutputBox from './OutputBox';
 import styles from '../styles/ValeeraCard.module.scss';
 
 const ValeeraCard = () => {
-  const [response, setResponse] = useState('Hello, I’m Valeera! What can I help you with?');
+  const [responseMessage, setResponseMessage] = useState('Hello! I am Valeera, your assistant.');
 
-  const handleInput = (input) => {
-    // echo input as response change logic later.
-    setResponse(`Valeera: ${input}`);
+  const handleSendMessage = async (message: string) => {
+    try {
+      const res = await fetch('http://localhost:8080/api/message', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ content: message }),
+      });
+
+      const data = await res.json();
+      setResponseMessage(data.reply); // Update response from backend
+    } catch (error) {
+      console.error('Error sending message:', error);
+      setResponseMessage('Sorry, something went wrong.');
+    }
   };
 
   return (
     <div className={styles.card}>
-      <h1 className={styles.title}>Valeera</h1>
+      <h1 className={styles.heading}>Valeera</h1>
       <Image
-        src="/valeera.jpeg"
+        src="/valeera.jpeg" 
         alt="Valeera"
         width={400}
         height={600}
-        className={styles.valeeraImage}
+        className={styles.image}
       />
-      <InputBox handleInput={handleInput} />
-      <OutputBox response={response} />
+      {/* Message Input */}
+      <InputBox handleInput={handleSendMessage} />
+      {/* Message Output */}
+      <OutputBox response={responseMessage} />
     </div>
   );
 };
