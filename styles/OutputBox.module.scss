@@ -1,20 +1,55 @@
 
+
 .outputContainer {
+  background-color: #1f1f1f;
+  border: 2px solid #00ffff;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+  text-align: left;
+  max-width: 600px;
+  color: #e6e6e6;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.1rem;
+  box-shadow: 0px 4px 15px rgba(0, 255, 255, 0.5);
+  overflow: hidden; // To manage overflow when expanded
+  transition: all 0.3s ease; // Smooth transition for expansion
+}
+
+.responseText {
+  margin: 0;
+  text-shadow: 1px 1px 5px rgba(255, 0, 255, 0.8);
+}
+
+.copyButton,
+.toggleButton {
+  background-color: #00ffff;
+  border: none;
+  color: #1f1f1f;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+
+  &:hover {
     background-color: #1f1f1f;
-    border: 2px solid #00ffff;
-    padding: 20px;
-    border-radius: 10px;
-    margin-top: 20px;
-    text-align: left;
-    max-width: 600px;
-    color: #e6e6e6;
-    font-family: 'Roboto', sans-serif;
-    font-size: 1.1rem;
-    box-shadow: 0px 4px 15px rgba(0, 255, 255, 0.5);
+    color: #00ffff;
   }
-  
-  .responseText {
-    margin: 0;
-    text-shadow: 1px 1px 5px rgba(255, 0, 255, 0.8);
+}
+
+// Responsive styles
+@media (max-width: 600px) {
+  .outputContainer {
+    padding: 15px; // Adjust padding for smaller screens
+    font-size: 1rem; // Reduce font size
+    max-width: 90%; // Make width more flexible
   }
-  
+
+  .copyButton,
+  .toggleButton {
+    width: 100%; // Make buttons full width
+    font-size: 0.9rem; // Smaller font size for buttons
+  }
+}

@@ -46,3 +46,5 @@ public/valeera.jpeg
 .electron
 /electron
 /*.asar
+
+.env

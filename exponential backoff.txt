@@ -1,0 +1,78 @@
+// Function to get a response from OpenAI with exponential backoff
+func getOpenAIResponse(question string) (string, error) {
+	// Retrieve the OpenAI API key from environment variables
+	apiKey := os.Getenv("OPENAI_API_KEY")
+
+	// Create a new HTTP client to make requests
+	client := &http.Client{}
+
+	// Prepare the request body with the model and the user's question
+	reqBody := map[string]interface{}{
+		"model": "gpt-3.5-turbo", // Specify the model to use
+		"messages": []map[string]string{
+			{"role": "user", "content": question}, // User's input as a message
+		},
+	}
+
+	// Marshal the request body into JSON format
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return "", err // Return an error if marshalling fails
+	}
+
+	// Create a new POST request to the OpenAI API endpoint
+	req, err := http.NewRequest("POST", "https://api.openai.com/v1/chat/completions", bytes.NewBuffer(body))
+	if err != nil {
+		return "", err // Return an error if request creation fails
+	}
+
+	// Set the Authorization header with the Bearer token for API access
+	req.Header.Set("Authorization", "Bearer "+apiKey)
+	// Set the Content-Type header to application/json
+	req.Header.Set("Content-Type", "application/json")
+
+	var resp *http.Response // Declare a variable to hold the API response
+	maxRetries := 5 // Maximum number of retries for handling rate limiting
+
+	// Loop to attempt sending the request with exponential backoff
+	for i := 0; i < maxRetries; i++ {
+		resp, err = client.Do(req) // Send the request
+		if err == nil { // Check if the request was successful
+			defer resp.Body.Close() // Ensure response body is closed after processing
+			if resp.StatusCode == http.StatusOK {
+				break // Exit the loop if the response is OK
+			} else if resp.StatusCode == http.StatusTooManyRequests {
+				// Handle rate limiting with exponential backoff
+				waitTime := time.Duration((1 << i)) * time.Second // Calculate wait time: 1s, 2s, 4s, 8s...
+				log.Printf("Rate limit hit, waiting %v before retrying...", waitTime)
+				time.Sleep(waitTime) // Sleep for the calculated wait time
+			} else {
+				// Log the response status if it's not OK or rate limit
+				log.Printf("OpenAI API returned status: %s", resp.Status)
+				return "", fmt.Errorf("OpenAI API returned status: %s", resp.Status)
+			}
+		} else {
+			// Log any errors that occur during the request
+			log.Println("Error making request to OpenAI:", err)
+			return "", err // Return the error if the request fails
+		}
+	}
+
+	// Process the response from OpenAI
+	var result map[string]interface{}
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+		return "", err // Return an error if decoding fails
+	}
+
+	// Extracting the response text from the result
+	if choices, ok := result["choices"].([]interface{}); ok && len(choices) > 0 {
+		if message, ok := choices[0].(map[string]interface{}); ok {
+			if content, ok := message["message"].(map[string]interface{})["content"].(string); ok {
+				return content, nil // Return the extracted content as the response
+			}
+		}
+	}
+
+	// Return an error if a valid response could not be extracted
+	return "", fmt.Errorf("failed to get a valid response from OpenAI")
+}
