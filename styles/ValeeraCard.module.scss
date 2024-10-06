@@ -1,0 +1,36 @@
+.card {
+    background-color: #1f1f1f; 
+    border: 2px solid #ff00ff; /* Neon pink border */
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0px 4px 15px rgba(255, 0, 255, 0.5);
+    transition: transform 0.2s ease-in-out;
+    max-width: 450px;
+    margin: 50px auto;
+  
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0px 6px 25px rgba(255, 0, 255, 0.7);
+    }
+  }
+  
+  .cardImage {
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  
+  .image {
+    border-radius: 50%;
+    border: 3px solid #ff00ff;
+  }
+  
+  .heading {
+    font-family: 'Roboto', sans-serif;
+    color: #e6e6e6;
+    font-size: 2rem;
+    margin: 0;
+    text-shadow: 2px 2px 10px rgba(0, 255, 255, 0.8);
+  }
+  

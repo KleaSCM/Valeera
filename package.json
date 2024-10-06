@@ -1,0 +1,29 @@
+{
+  "name": "valeera",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev:next": "next dev -p 3000",         
+    "dev:electron": "electron ./main/index.js", 
+    "dev": "concurrently \"npm run dev:next\" \"npm run dev:electron\"", 
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "electron": "^32.1.2",
+    "next": "^14.2.14",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "sass": "^1.79.4",
+    "concurrently": "^8.2.0" 
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.4",
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.0",
+    "typescript": "^5.6.2"
+  }
+}

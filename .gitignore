@@ -1,0 +1,48 @@
+# Ignore node_modules and logs
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+/dist
+/.next
+
+# Ignore your environment settings
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Ignore logs
+logs
+*.log
+yarn-debug.log*
+yarn-error.log*
+
+# Ignore any build outputs
+build/
+out/
+
+# Ignore your local OS settings and configurations
+.DS_Store
+*.swp
+.vscode/
+.idea/
+*~
+
+# Ignore package lock files (if necessary)
+package-lock.json
+yarn.lock
+
+# Ignore images and large files from being accidentally committed (add more as necessary)
+*.png
+*.jpg
+*.jpeg
+
+# Ignore the public directory (optional depending on what you want to track)
+public/valeera.jpeg
+
+# Ignore Electron build files if any
+.electron
+/electron
+/*.asar
